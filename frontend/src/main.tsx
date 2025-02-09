@@ -5,6 +5,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout.tsx";
 import Homepage from "./pages/Homepage.tsx";
 import Register from "./pages/Register.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AppContextProvider } from "./contexts/AppContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -23,8 +25,20 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 0,
+    },
+  },
+});
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <AppContextProvider>
+        <RouterProvider router={router} />
+      </AppContextProvider>
+    </QueryClientProvider>
   </StrictMode>
 );

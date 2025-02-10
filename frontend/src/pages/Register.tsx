@@ -1,6 +1,10 @@
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import * as apiClient from "../api-client";
+import { useAppContext } from "../contexts/AppContext";
+import { useNavigate } from "react-router-dom";
 
-type RegisterFormData = {
+export type RegisterFormData = {
   firstName: string;
   lastName: string;
   email: string;
@@ -9,84 +13,141 @@ type RegisterFormData = {
 };
 
 const Register = () => {
-  const { register, watch, handleSubmit } = useForm<RegisterFormData>();
+  const navigate = useNavigate();
+  const { showToast } = useAppContext();
+
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>();
+
+  const mutation = useMutation({
+    mutationFn: apiClient.register,
+    onSuccess: () => {
+      showToast({ message: "Register Success!", type: "SUCCESS" });
+      navigate("/");
+    },
+    onError: (error: Error) => {
+      showToast({ message: error.message, type: "ERROR" });
+    },
+  });
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
+    mutation.mutate(data);
   });
+
   return (
-    <main className="flex justify-center">
-      <form className="flex flex-col gap-5" onSubmit={onSubmit}>
-        <h2 className="text-3xl font-bold">Create an Account</h2>
-        <div className="flex flex-col md:flex-row gap-5">
-          <label className="text-gray-700 text-sm font-bold">
-            First Name
-            <input
-              type="text"
-              className="border rounded w-full py-1 px-2 font-normal"
-              {...register("firstName", {
-                required: "This is field is required.",
-              })}
-            />
-          </label>
-          <label className="text-gray-700 text-sm font-bold">
-            Last Name
-            <input
-              type="text"
-              className="border rounded w-full py-1 px-2 font-normal"
-              {...register("lastName", {
-                required: "This is field is required.",
-              })}
-            />
-          </label>
+    <div className="flex items-center justify-center container my-auto bg-[url('/bg.jpg')] bg-cover bg-center bg-no-repeat">
+      <form
+        className="w-full max-w-lg p-8 rounded-lg bg-white/20 shadow-lg backdrop-blur-sm"
+        onSubmit={onSubmit}
+      >
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Create Account
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="text-gray-700 text-sm font-bold">
+              First Name
+              <input
+                type="text"
+                className="border rounded w-full mt-1 p-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                {...register("firstName", {
+                  required: "This field is required.",
+                })}
+              />
+            </label>
+            {errors.firstName && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.firstName.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="text-gray-700 text-sm font-bold">
+              Last Name
+              <input
+                type="text"
+                className="border rounded w-full mt-1 p-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                {...register("lastName", {
+                  required: "This field is required.",
+                })}
+              />
+            </label>
+            {errors.lastName && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.lastName.message}
+              </p>
+            )}
+          </div>
         </div>
-        <label className="text-gray-700 text-sm font-bold">
-          Email
-          <input
-            type="email"
-            className="border rounded w-full py-1 px-2 font-normal"
-            {...register("email", {
-              required: "This is field is required.",
-            })}
-          />
-        </label>
-        <label className="text-gray-700 text-sm font-bold">
-          Password
-          <input
-            type="password"
-            className="border rounded w-full py-1 px-2 font-normal"
-            {...register("password", {
-              required: "This is field is required.",
-              minLength: {
-                value: 6,
-                message: "Password must be at least 6 character",
-              },
-            })}
-          />
-        </label>
-        <label className="text-gray-700 text-sm font-bold">
-          Confirm Password
-          <input
-            type="password"
-            className="border rounded w-full py-1 px-2 font-normal"
-            {...register("confirmPassword", {
-              validate: (val) => {
-                if (!val) {
-                  return "This field is required";
-                } else if (watch("password") !== val) {
-                  return "Your password do not match";
-                }
-              },
-            })}
-          />
-        </label>
-        <span>
-          <button className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl">
-            Create Account
-          </button>
-        </span>
+
+        <div className="mt-4">
+          <label className="text-gray-700 text-sm font-bold">
+            Email
+            <input
+              type="email"
+              className="border rounded w-full mt-1 p-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              {...register("email", { required: "This field is required." })}
+            />
+          </label>
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+          )}
+        </div>
+
+        <div className="mt-4">
+          <label className="text-gray-700 text-sm font-bold">
+            Password
+            <input
+              type="password"
+              className="border rounded w-full mt-1 p-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              {...register("password", {
+                required: "This field is required.",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters.",
+                },
+              })}
+            />
+          </label>
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        <div className="mt-4">
+          <label className="text-gray-700 text-sm font-bold">
+            Confirm Password
+            <input
+              type="password"
+              className="border rounded w-full mt-1 p-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              {...register("confirmPassword", {
+                validate: (val) => {
+                  if (!val) return "This field is required.";
+                  if (watch("password") !== val)
+                    return "Passwords do not match.";
+                },
+              })}
+            />
+          </label>
+          {errors.confirmPassword && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.confirmPassword.message}
+            </p>
+          )}
+        </div>
+
+        <button className="w-full bg-blue-600 text-white py-2 px-4 mt-6 font-bold rounded-lg hover:bg-blue-500 text-lg transition">
+          Create Account
+        </button>
       </form>
-    </main>
+    </div>
   );
 };
 

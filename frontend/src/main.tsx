@@ -7,6 +7,7 @@ import Homepage from "./pages/Homepage.tsx";
 import Register from "./pages/Register.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppContextProvider } from "./contexts/AppContext.tsx";
+import SignIn from "./pages/SignIn.tsx";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/sign-in",
+        element: <SignIn />,
       },
     ],
   },

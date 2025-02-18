@@ -1,7 +1,7 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import * as apiClient from "../api-client";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../contexts/AppContext";
 
 export type SigninFormData = {
@@ -24,7 +24,7 @@ const SignIn = () => {
     mutationFn: apiClient.signIn,
     onSuccess: async () => {
       showToast({ message: "Sign in Successful", type: "SUCCESS" });
-      await queryClient.invalidateQueries({ queryKey: ["validationToken"] });
+      await queryClient.invalidateQueries({ queryKey: ["validateToken"] });
       navigate("/");
     },
     onError: (error: Error) => {
@@ -42,9 +42,9 @@ const SignIn = () => {
         className="w-full max-w-lg p-8 rounded-lg bg-white/20 shadow-lg backdrop-blur-sm"
         onSubmit={onSubmit}
       >
-        <h1>signin</h1>
+        <h1 className="font-bold text-2xl text-white mb-3">Sign In</h1>
 
-        <label className="text-gray-700 text-sm font-bold mt-4">
+        <label className="text-white text-sm font-bold mt-4">
           Email
           <input
             type="email"
@@ -56,7 +56,7 @@ const SignIn = () => {
           <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
         )}
 
-        <label className="text-gray-700 text-sm font-bold mt-4">
+        <label className="text-white text-sm font-bold mt-4">
           Password
           <input
             type="password"
@@ -73,9 +73,17 @@ const SignIn = () => {
         {errors.password && (
           <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
         )}
-        <button className="w-full bg-blue-600 text-white py-2 px-4 mt-6 font-bold rounded-lg hover:bg-blue-500 text-lg transition">
-          Sign In
-        </button>
+        <span className="flex items-end justify-between">
+          <span className="flex text-sm text-white flex-col">
+            Not Registered?{" "}
+            <Link to="/register" className="underline">
+              Create an account here
+            </Link>
+          </span>
+          <button className="bg-blue-600 text-white py-2 px-4 mt-6 font-bold rounded-lg hover:bg-blue-500 text-lg transition">
+            Sign In
+          </button>
+        </span>
       </form>
     </div>
   );

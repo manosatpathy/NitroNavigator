@@ -22,7 +22,7 @@ export const AppContextProvider = ({
 }) => {
   const [toast, setToast] = useState<ToastMessage | undefined>(undefined);
   const { isError } = useQuery({
-    queryKey: ["validationToken"],
+    queryKey: ["validateToken"],
     queryFn: apiClient.validateToken,
     retry: false,
   });

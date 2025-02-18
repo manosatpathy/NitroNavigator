@@ -1,13 +1,16 @@
 {
+  "version": 2,
   "buildCommand": "cd frontend && npm install && npm run build && cd ../backend && npm install && npm run build",
   "installCommand": "cd frontend && npm install && cd ../backend && npm install",
-  "builds": [
-    {
-      "src": "/backend/dist/index.js",
-      "use": "@vercel/node"
-    }
-  ],
+  "outputDirectory": "backend/dist",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/backend/dist/index.js" }
+    {
+      "source": "/api/(.*)",
+      "destination": "/backend/dist/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/backend/dist/index.js"
+    }
   ]
 }

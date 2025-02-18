@@ -3,9 +3,9 @@
   "installCommand": "cd frontend && npm install && cd ../backend && npm install",
   "builds": [
     {
-      "src": "backend/dist/index.js",
+      "src": "/backend/dist/index.js",
       "use": "@vercel/node"
     }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "/backend/dist/index.js" }]
+  "rewrites": [{ "src": "/api/(.*)", "destination": "/backend/dist/index.js" }]
 }

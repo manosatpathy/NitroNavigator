@@ -1,6 +1,6 @@
 {
   "version": 2,
   "buildCommand": "cd frontend && npm install && npm run build && cd .. && mkdir -p backend/public && cp -r frontend/dist/* backend/public/ && cd backend && npm install && npm run build",
-  "builds": [{ "src": "/backend/dist/index.js", "use": "@vercel/node" }],
-  "rewrites": [{ "source": "/(.*)", "destination": "/backend/dist/index.js" }]
+  "builds": [{ "src": "backend/dist/index.js", "use": "@vercel/node" }],
+  "routes": [{ "src": "/(.*)", "dest": "backend/dist/index.js" }]
 }

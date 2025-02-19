@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import "dotenv/config";
 import mongoose from "mongoose";
@@ -19,6 +19,9 @@ app.use(
   })
 );
 
+app.get("/", (req: Request, res: Response) => {
+  res.json({ message: "all working" });
+});
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 

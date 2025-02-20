@@ -54,6 +54,9 @@ router.get("/validate-token", verifyToken, (req: Request, res: Response) => {
 
 router.post("/signout", (req: Request, res: Response) => {
   res.cookie("auth_token", "", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
     expires: new Date(0),
   });
   res.send();

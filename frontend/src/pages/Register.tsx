@@ -61,12 +61,12 @@ const Register = () => {
                   required: "This field is required.",
                 })}
               />
+              {errors.firstName && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.firstName.message}
+                </p>
+              )}{" "}
             </label>
-            {errors.firstName && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.firstName.message}
-              </p>
-            )}
           </div>
           <div>
             <label className="text-gray-700 text-sm font-bold">
@@ -78,12 +78,12 @@ const Register = () => {
                   required: "This field is required.",
                 })}
               />
+              {errors.lastName && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.lastName.message}
+                </p>
+              )}
             </label>
-            {errors.lastName && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.lastName.message}
-              </p>
-            )}
           </div>
         </div>
 
@@ -95,10 +95,12 @@ const Register = () => {
               className="border rounded w-full mt-1 p-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               {...register("email", { required: "This field is required." })}
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </label>
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
         </div>
 
         <div className="mt-4">
@@ -115,12 +117,12 @@ const Register = () => {
                 },
               })}
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </label>
-          {errors.password && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.password.message}
-            </p>
-          )}
         </div>
 
         <div className="mt-4">
@@ -133,16 +135,16 @@ const Register = () => {
                 validate: (val) => {
                   if (!val) return "This field is required.";
                   if (watch("password") !== val)
-                    return "Passwords do not match.";
+                    return "Password does not match.";
                 },
               })}
             />
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.confirmPassword.message}
+              </p>
+            )}
           </label>
-          {errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.confirmPassword.message}
-            </p>
-          )}
         </div>
 
         <button className="w-full bg-blue-600 text-white py-2 px-4 mt-6 font-bold rounded-lg hover:bg-blue-500 text-lg transition">

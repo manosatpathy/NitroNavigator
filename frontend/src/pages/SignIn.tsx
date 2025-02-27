@@ -51,11 +51,10 @@ const SignIn = () => {
             className="border rounded w-full mt-1 p-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             {...register("email", { required: "This field is required." })}
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+          )}
         </label>
-        {errors.email && (
-          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-        )}
-
         <label className="text-white text-sm font-bold mt-4">
           Password
           <input
@@ -69,10 +68,12 @@ const SignIn = () => {
               },
             })}
           />
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </p>
+          )}
         </label>
-        {errors.password && (
-          <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-        )}
         <span className="flex items-end justify-between">
           <span className="flex text-sm text-white flex-col">
             Not Registered?{" "}

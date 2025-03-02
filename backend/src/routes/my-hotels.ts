@@ -4,7 +4,7 @@ import multer from "multer";
 import cloudinary from "cloudinary";
 import Hotel, { HotelType } from "../models/hotel";
 import verifyToken from "../middleware/auth";
-import { body } from "express-validator";
+import { body, validationResult } from "express-validator";
 
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -17,6 +17,7 @@ const upload = multer({
 router.post(
   "/",
   verifyToken,
+  upload.array("imageFiles", 6),
   [
     body("name").notEmpty().withMessage("Name is required"),
     body("city").notEmpty().withMessage("City is required"),
@@ -28,16 +29,20 @@ router.post(
       .withMessage("pricePerNight is required and must be a number"),
     body("facilities")
       .notEmpty()
-      .isArray()
+      .isArray({ min: 1 })
       .withMessage("Facilities are required"),
   ],
-  upload.array("imageFiles", 6),
+
   async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ message: errors.array() });
+    }
     try {
       const imageFiles = req.files as Express.Multer.File[];
       const newHotel: HotelType = req.body;
       const uploadPromises = imageFiles.map(async (image) => {
-        const b64 = Buffer.from(image.buffer).toString();
+        const b64 = Buffer.from(image.buffer).toString("base64");
         let dataURI = "data:" + image.mimetype + ";base64," + b64;
         const res = await cloudinary.v2.uploader.upload(dataURI);
         return res.url;

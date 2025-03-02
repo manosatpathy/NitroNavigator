@@ -24,7 +24,7 @@ const Register = () => {
     formState: { errors },
   } = useForm<RegisterFormData>();
 
-  const mutation = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: apiClient.register,
     onSuccess: async () => {
       showToast({ message: "Register Success!", type: "SUCCESS" });
@@ -37,7 +37,7 @@ const Register = () => {
   });
 
   const onSubmit = handleSubmit((data) => {
-    mutation.mutate(data);
+    mutate(data);
   });
 
   return (
@@ -147,8 +147,11 @@ const Register = () => {
           </label>
         </div>
 
-        <button className="w-full bg-blue-600 text-white py-2 px-4 mt-6 font-bold rounded-lg hover:bg-blue-500 text-lg transition">
-          Create Account
+        <button
+          disabled={isPending}
+          className="w-full bg-blue-600 text-white py-2 px-4 mt-6 font-bold rounded-lg hover:bg-blue-500 text-lg transition disabled:bg-gray-500"
+        >
+          {isPending ? "Creating Account" : "Create Account"}
         </button>
       </form>
     </div>

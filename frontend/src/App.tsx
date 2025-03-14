@@ -9,6 +9,9 @@ import Homepage from "./pages/Homepage.tsx";
 import Register from "./pages/Register.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import AddHotel from "./pages/AddHotel.tsx";
+import MyHotels from "./pages/MyHotels.tsx";
+import EditHotel from "./pages/EditHotel.tsx";
+import Search from "./pages/Search.tsx";
 
 function App() {
   const { isLoggedIn } = useAppContext();
@@ -31,8 +34,20 @@ function App() {
           element: <SignIn />,
         },
         {
+          path: "/edit-hotel/:hotelId",
+          element: <EditHotel />,
+        },
+        {
           path: "/add-hotel",
           element: isLoggedIn ? <AddHotel /> : <Navigate to="/sign-in" />,
+        },
+        {
+          path: "/my-hotels",
+          element: isLoggedIn ? <MyHotels /> : <Navigate to="/sign-in" />,
+        },
+        {
+          path: "/search",
+          element: <Search />,
         },
       ],
     },

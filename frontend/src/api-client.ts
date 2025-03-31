@@ -1,7 +1,11 @@
 import { RegisterFormData } from "./pages/Register";
 import { SigninFormData } from "./pages/SignIn";
 import { HotelType } from "../../backend/src/models/hotel";
-import { HotelSearchResponse, UserType } from "../../backend/src/types";
+import {
+  HotelSearchResponse,
+  PaymentIntentResponse,
+  UserType,
+} from "../../backend/src/types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -163,6 +167,27 @@ export const fetchHotelById = async (hotelId: string): Promise<HotelType> => {
   const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}`);
   if (!response.ok) {
     throw new Error("Error fetching Hotels");
+  }
+  return response.json();
+};
+
+export const createPaymentIntent = async (
+  hotelId: string,
+  numberOfNights: string
+): Promise<PaymentIntentResponse> => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/hotels/${hotelId}/bookings/payment-intent`,
+    {
+      credentials: "include",
+      method: "POST",
+      body: JSON.stringify({ numberOfNights }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Error fetching payment intent");
   }
   return response.json();
 };

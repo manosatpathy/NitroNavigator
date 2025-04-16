@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export type RegisterFormData = {
   firstName: string;
@@ -41,12 +41,20 @@ const Register = () => {
   });
 
   return (
-    <div className="flex items-center justify-center container my-auto bg-[url('/bg.jpg')] bg-cover bg-center bg-no-repeat">
+    <div className="flex items-stretch justify-center container mx-auto my-4 h-auto px-56">
+      <div className="w-1/2 relative overflow-hidden rounded-lg">
+        <img
+          src="/bg.jpg"
+          alt="Background"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-green-500/70 z-10"></div>
+      </div>
       <form
-        className="w-full max-w-lg p-8 rounded-lg bg-white/20 shadow-lg backdrop-blur-sm"
+        className="w-1/2 p-8 rounded-lg bg-white/30 shadow-lg backdrop-blur-sm"
         onSubmit={onSubmit}
       >
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">
           Create Account
         </h2>
 
@@ -56,7 +64,7 @@ const Register = () => {
               First Name
               <input
                 type="text"
-                className="border rounded w-full mt-1 p-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="border rounded-lg w-full mt-1 py-3 px-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 {...register("firstName", {
                   required: "This field is required.",
                 })}
@@ -73,7 +81,7 @@ const Register = () => {
               Last Name
               <input
                 type="text"
-                className="border rounded w-full mt-1 p-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="border rounded-lg w-full mt-1 py-3 px-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 {...register("lastName", {
                   required: "This field is required.",
                 })}
@@ -92,7 +100,7 @@ const Register = () => {
             Email
             <input
               type="email"
-              className="border rounded w-full mt-1 p-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="border rounded-lg w-full mt-1 py-3 px-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               {...register("email", { required: "This field is required." })}
             />
             {errors.email && (
@@ -108,7 +116,7 @@ const Register = () => {
             Password
             <input
               type="password"
-              className="border rounded w-full mt-1 p-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="border rounded-lg w-full mt-1 py-3 px-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               {...register("password", {
                 required: "This field is required.",
                 minLength: {
@@ -130,7 +138,7 @@ const Register = () => {
             Confirm Password
             <input
               type="password"
-              className="border rounded w-full mt-1 p-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="border rounded-lg w-full mt-1 py-3 px-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               {...register("confirmPassword", {
                 validate: (val) => {
                   if (!val) return "This field is required.";
@@ -153,6 +161,15 @@ const Register = () => {
         >
           {isPending ? "Creating Account" : "Create Account"}
         </button>
+        <div className="mt-6 text-sm text-center text-black flex justify-center gap-2">
+          Alreadty have an account?
+          <Link
+            to="/sign-in"
+            className="text-blue-400 hover:underline transition duration-200 tracking-tighter"
+          >
+            Sign in here
+          </Link>
+        </div>
       </form>
     </div>
   );

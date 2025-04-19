@@ -185,6 +185,9 @@ const constructSearchQuery = (queryParams: any) => {
       {
         country: new RegExp(queryParams.destination, "i"),
       },
+      {
+        name: new RegExp(queryParams.destination, "i"),
+      },
     ];
   }
 

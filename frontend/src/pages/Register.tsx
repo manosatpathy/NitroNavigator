@@ -41,136 +41,141 @@ const Register = () => {
   });
 
   return (
-    <div className="flex items-stretch justify-center container mx-auto my-4 h-auto px-56">
-      <div className="w-1/2 relative overflow-hidden rounded-lg">
-        <img
-          src="/bg.jpg"
-          alt="Background"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-green-500/70 z-10"></div>
-      </div>
-      <form
-        className="w-1/2 p-8 rounded-lg bg-white/30 shadow-lg backdrop-blur-sm"
-        onSubmit={onSubmit}
-      >
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">
-          Create Account
-        </h2>
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white/30 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg">
+        <div className="md:w-1/2 w-full h-64 md:h-auto relative">
+          <img
+            src="/bg.jpg"
+            alt="Background"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-green-500/70 z-10" />
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="text-gray-700 text-sm font-bold">
-              First Name
-              <input
-                type="text"
-                className="border rounded-lg w-full mt-1 py-3 px-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                {...register("firstName", {
-                  required: "This field is required.",
-                })}
-              />
-              {errors.firstName && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.firstName.message}
-                </p>
-              )}{" "}
-            </label>
+        <form
+          className="md:w-1/2 w-full p-6 sm:p-8 flex flex-col justify-between"
+          onSubmit={onSubmit}
+        >
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+            Create Account
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="min-h-[90px]">
+              <label className="text-gray-700 text-sm font-bold">
+                First Name
+                <input
+                  type="text"
+                  className="border rounded-lg w-full mt-1 py-2 px-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  {...register("firstName", {
+                    required: "This field is required.",
+                  })}
+                />
+                {errors.firstName && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.firstName.message}
+                  </p>
+                )}
+              </label>
+            </div>
+
+            <div className="min-h-[90px]">
+              <label className="text-gray-700 text-sm font-bold">
+                Last Name
+                <input
+                  type="text"
+                  className="border rounded-lg w-full mt-1 py-2 px-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  {...register("lastName", {
+                    required: "This field is required.",
+                  })}
+                />
+                {errors.lastName && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.lastName.message}
+                  </p>
+                )}
+              </label>
+            </div>
           </div>
-          <div>
+
+          <div className="min-h-[90px]">
             <label className="text-gray-700 text-sm font-bold">
-              Last Name
+              Email
               <input
-                type="text"
-                className="border rounded-lg w-full mt-1 py-3 px-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                {...register("lastName", {
-                  required: "This field is required.",
-                })}
+                type="email"
+                className="border rounded-lg w-full mt-1 py-2 px-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                {...register("email", { required: "This field is required." })}
               />
-              {errors.lastName && (
+              {errors.email && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.lastName.message}
+                  {errors.email.message}
                 </p>
               )}
             </label>
           </div>
-        </div>
 
-        <div className="mt-4">
-          <label className="text-gray-700 text-sm font-bold">
-            Email
-            <input
-              type="email"
-              className="border rounded-lg w-full mt-1 py-3 px-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              {...register("email", { required: "This field is required." })}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </label>
-        </div>
+          <div className="min-h-[90px]">
+            <label className="text-gray-700 text-sm font-bold">
+              Password
+              <input
+                type="password"
+                className="border rounded-lg w-full mt-1 py-2 px-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                {...register("password", {
+                  required: "This field is required.",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters.",
+                  },
+                })}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
+              )}
+            </label>
+          </div>
 
-        <div className="mt-4">
-          <label className="text-gray-700 text-sm font-bold">
-            Password
-            <input
-              type="password"
-              className="border rounded-lg w-full mt-1 py-3 px-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              {...register("password", {
-                required: "This field is required.",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters.",
-                },
-              })}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </label>
-        </div>
+          <div className="min-h-[90px]">
+            <label className="text-gray-700 text-sm font-bold">
+              Confirm Password
+              <input
+                type="password"
+                className="border rounded-lg w-full mt-1 py-2 px-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                {...register("confirmPassword", {
+                  validate: (val) => {
+                    if (!val) return "This field is required.";
+                    if (watch("password") !== val)
+                      return "Password does not match.";
+                  },
+                })}
+              />
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
+            </label>
+          </div>
 
-        <div className="mt-4">
-          <label className="text-gray-700 text-sm font-bold">
-            Confirm Password
-            <input
-              type="password"
-              className="border rounded-lg w-full mt-1 py-3 px-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              {...register("confirmPassword", {
-                validate: (val) => {
-                  if (!val) return "This field is required.";
-                  if (watch("password") !== val)
-                    return "Password does not match.";
-                },
-              })}
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </label>
-        </div>
-
-        <button
-          disabled={isPending}
-          className="w-full bg-blue-600 text-white py-2 px-4 mt-6 font-bold rounded-lg hover:bg-blue-500 text-lg transition disabled:bg-gray-500"
-        >
-          {isPending ? "Creating Account" : "Create Account"}
-        </button>
-        <div className="mt-6 text-sm text-center text-black flex justify-center gap-2">
-          Alreadty have an account?
-          <Link
-            to="/sign-in"
-            className="text-blue-400 hover:underline transition duration-200 tracking-tighter"
+          <button
+            disabled={isPending}
+            className="w-full bg-blue-600 text-white py-2 px-4 mt-6 font-bold rounded-lg hover:bg-blue-500 text-lg transition disabled:bg-gray-500"
           >
-            Sign in here
-          </Link>
-        </div>
-      </form>
+            {isPending ? "Creating Account" : "Create Account"}
+          </button>
+
+          <div className="mt-6 text-sm text-center text-black">
+            Already have an account?{" "}
+            <Link
+              to="/sign-in"
+              className="text-blue-500 hover:underline transition duration-200"
+            >
+              Sign in here
+            </Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

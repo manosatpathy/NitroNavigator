@@ -2,9 +2,10 @@ import express, { Request, Response } from "express";
 const router = express.Router();
 import multer from "multer";
 import cloudinary from "cloudinary";
-import Hotel, { HotelType } from "../models/hotel";
+import Hotel from "../models/hotel";
 import verifyToken from "../middleware/auth";
 import { body, validationResult } from "express-validator";
+import { HotelType } from "../types";
 
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -40,7 +41,7 @@ router.post(
     }
     try {
       const imageFiles = req.files as Express.Multer.File[];
-      const newHotel: HotelType = req.body;
+      const newHotel = req.body;
       const imageUrls = await uploadImages(imageFiles);
       newHotel.imageUrls = imageUrls;
       newHotel.lastUpdated = new Date();

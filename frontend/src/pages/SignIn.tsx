@@ -46,16 +46,18 @@ const SignIn = () => {
             alt="Background"
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-green-500/70 z-10"></div>
+          <div className="absolute inset-0 bg-purple-200/70 z-10"></div>
         </div>
         <form
           className="w-full md:w-1/2 p-8 rounded-lg bg-white/30 shadow-lg backdrop-blur-sm"
           onSubmit={onSubmit}
         >
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">Sign In</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-6 font-[roboto]">
+            Sign In
+          </h2>
 
           <div className="min-h-[100px]">
-            <label className="text-gray-700 text-sm font-bold">
+            <label className="text-gray-700 text-sm font-bold font-sans">
               Email
               <input
                 type="email"
@@ -71,7 +73,7 @@ const SignIn = () => {
           </div>
 
           <div className="min-h-[100px]">
-            <label className="text-gray-700 text-sm font-bold">
+            <label className="text-gray-700 text-sm font-bold font-sans">
               Password
               <input
                 type="password"
@@ -95,7 +97,7 @@ const SignIn = () => {
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="w-full bg-blue-600 text-white py-2 px-4 mt-6 font-bold rounded-lg hover:bg-blue-500 text-lg transition disabled:bg-gray-500"
+            className="w-full bg-blue-600 text-white py-2 px-4 mt-6 font-bold font-[roboto] rounded-lg hover:bg-blue-500 text-lg transition disabled:bg-gray-500"
           >
             {mutation.isPending ? "Signing In..." : "Sign In"}
           </button>

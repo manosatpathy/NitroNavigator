@@ -1,9 +1,8 @@
 import {
   createBrowserRouter,
-  Navigate,
   RouterProvider,
+  ScrollRestoration,
 } from "react-router-dom";
-import { useAppContext } from "./contexts/AppContext.tsx";
 import MainLayout from "./layouts/MainLayout.tsx";
 import Homepage from "./pages/Homepage.tsx";
 import Register from "./pages/Register.tsx";
@@ -12,14 +11,21 @@ import AddHotel from "./pages/AddHotel.tsx";
 import MyHotels from "./pages/MyHotels.tsx";
 import EditHotel from "./pages/EditHotel.tsx";
 import Search from "./pages/Search.tsx";
+import MyBookings from "./pages/MyBookings.tsx";
+import Details from "./pages/Details.tsx";
+import Booking from "./pages/Booking.tsx";
+import ProtectedRoute from "./utils/ProtectedRoute.tsx";
 
 function App() {
-  const { isLoggedIn } = useAppContext();
-
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <MainLayout />,
+      element: (
+        <>
+          <MainLayout />
+          <ScrollRestoration />
+        </>
+      ),
       children: [
         {
           path: "/",
@@ -34,20 +40,34 @@ function App() {
           element: <SignIn />,
         },
         {
-          path: "/edit-hotel/:hotelId",
-          element: <EditHotel />,
-        },
-        {
-          path: "/add-hotel",
-          element: isLoggedIn ? <AddHotel /> : <Navigate to="/sign-in" />,
-        },
-        {
-          path: "/my-hotels",
-          element: isLoggedIn ? <MyHotels /> : <Navigate to="/sign-in" />,
-        },
-        {
           path: "/search",
           element: <Search />,
+        },
+        {
+          path: "/detail/:hotelId",
+          element: <Details />,
+        },
+        {
+          element: <ProtectedRoute />,
+          children: [
+            { path: "/add-hotel", element: <AddHotel /> },
+            {
+              path: "/my-hotels",
+              element: <MyHotels />,
+            },
+            {
+              path: "/edit-hotel/:hotelId",
+              element: <EditHotel />,
+            },
+            {
+              path: "/my-bookings",
+              element: <MyBookings />,
+            },
+            {
+              path: "/hotel/:hotelId/booking",
+              element: <Booking />,
+            },
+          ],
         },
       ],
     },

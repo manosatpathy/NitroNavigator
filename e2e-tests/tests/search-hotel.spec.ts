@@ -5,7 +5,7 @@ const UI_URL = "http://localhost:5173";
 test.beforeEach(async ({ page }) => {
   await page.goto(UI_URL);
 
-  await page.getByRole("link", { name: "Sign In" }).click();
+  await page.getByRole("link", { name: "Login" }).click();
 
   await expect(page.getByRole("heading", { name: "Sign In" })).toBeVisible();
 
@@ -18,7 +18,7 @@ test.beforeEach(async ({ page }) => {
 
 test("should show hotel search results", async ({ page }) => {
   await page.goto(UI_URL);
-  await page.getByPlaceholder("Where are you going?").fill("Nayagarh");
+  await page.getByPlaceholder("Where would you like to stay?").fill("Nayagarh");
   await page.getByRole("button", { name: "Search" }).click();
   await expect(page.getByText("Hotels found in nayagarh")).toBeVisible();
   await expect(page.getByText("nayagarh hotel")).toBeVisible();
@@ -26,7 +26,7 @@ test("should show hotel search results", async ({ page }) => {
 
 test("should show hotel detail", async ({ page }) => {
   await page.goto(UI_URL);
-  await page.getByPlaceholder("Where are you going?").fill("Nayagarh");
+  await page.getByPlaceholder("Where would you like to stay?").fill("Nayagarh");
   await page.getByRole("button", { name: "Search" }).click();
   await page.getByText("nayagarh hotel").click();
   await expect(page).toHaveURL(/detail/);
@@ -35,21 +35,30 @@ test("should show hotel detail", async ({ page }) => {
 
 test("should book hotel", async ({ page }) => {
   await page.goto(UI_URL);
-  await page.getByPlaceholder("Where are you going?").fill("Nayagarh");
-  const date = new Date();
-  date.setDate(date.getDate() + 3);
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  const formattedDate = `${day}-${month}-${year}`;
-  console.log(formattedDate);
-  await page.getByPlaceholder("Check-out Date").fill(formattedDate);
+  await page.getByPlaceholder("Where would you like to stay?").fill("Nayagarh");
+
+  await page.getByPlaceholder("Select your dates").click();
+
+  const today = new Date();
+  const checkInDay = new Date(today);
+  checkInDay.setDate(today.getDate() + 3);
+  const checkOutDay = new Date(today);
+  checkOutDay.setDate(today.getDate() + 5);
+
+  await page
+    .locator(`.react-datepicker__day:text-is("${checkInDay.getDate()}")`)
+    .first()
+    .click();
+  await page
+    .locator(`.react-datepicker__day:text-is("${checkOutDay.getDate()}")`)
+    .first()
+    .click();
 
   await page.getByRole("button", { name: "Search" }).click();
   await page.getByText("nayagarh hotel").click();
   await page.getByRole("button", { name: "Book now" }).click();
 
-  await expect(page.getByText("Total Cost: $600.00")).toBeVisible();
+  await expect(page.getByText("$400.00")).toBeVisible();
   const stripeFrame = page.frameLocator("iframe").first();
   await stripeFrame
     .locator('[placeholder="Card number"]')
@@ -60,4 +69,7 @@ test("should book hotel", async ({ page }) => {
 
   await page.getByRole("button", { name: "Confirm Booking" }).click();
   await expect(page.getByText("Booking Saved!")).toBeVisible();
+
+  await page.getByRole("link", { name: "My Bookings" }).click();
+  await expect(page.getByText("nayagarh hotel")).toBeVisible();
 });

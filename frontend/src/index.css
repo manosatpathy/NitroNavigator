@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    background-color: rgb(129, 122, 109)
+    background-color: #f8f8f8;
+    font-family: "Inter", sans-serif;
   }
 }
-

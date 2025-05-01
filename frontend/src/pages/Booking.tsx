@@ -46,11 +46,15 @@ const Booking = () => {
   });
 
   if (!hotel) {
-    return <div>Loading hotel details...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="grid md:grid-cols-[1fr_2fr] gap-5">
+    <div className="grid md:grid-cols-[1fr_2fr] gap-5 container mx-auto h-screen items-center justify-center">
       <BookingDetailsSummary
         checkIn={search.checkIn}
         checkOut={search.checkOut}
@@ -59,7 +63,7 @@ const Booking = () => {
         numberOfNights={numberOfNights}
         hotel={hotel}
       />
-      {currentUser && paymentIntentData && (
+      {currentUser && paymentIntentData ? (
         <Elements
           stripe={stripePromise}
           options={{ clientSecret: paymentIntentData.clientSecret }}
@@ -69,6 +73,10 @@ const Booking = () => {
             paymentIntent={paymentIntentData}
           />
         </Elements>
+      ) : (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+        </div>
       )}
     </div>
   );

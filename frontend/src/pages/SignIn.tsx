@@ -26,7 +26,8 @@ const SignIn = () => {
     onSuccess: async () => {
       showToast({ message: "Sign in Successful", type: "SUCCESS" });
       await queryClient.invalidateQueries({ queryKey: ["validateToken"] });
-      navigate(location.state?.from?.pathname || "/");
+      const from = location.state?.from?.pathname;
+      navigate(from || "/");
     },
     onError: (error: Error) => {
       showToast({ message: error.message, type: "ERROR" });
@@ -46,7 +47,7 @@ const SignIn = () => {
             alt="Background"
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-purple-200/70 z-10"></div>
+          <div className="absolute inset-0 bg-indigo-400/70 z-10"></div>
         </div>
         <form
           className="w-full md:w-1/2 p-8 rounded-lg bg-white/30 shadow-lg backdrop-blur-sm"

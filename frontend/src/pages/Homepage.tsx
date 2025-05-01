@@ -1,10 +1,15 @@
+import Hero from "../components/Hero";
 import HowItWorks from "../components/HowItWorks";
+import LatestHotels from "../components/LatestHotels";
+import SignIn from "./SignIn";
 
 const Homepage = () => {
   return (
-    <div>
-      <h1>This is a homepage</h1>
-      <HowItWorks/>
+    <div className="flex flex-col gap-24">
+      <Hero />
+      <HowItWorks />
+      <LatestHotels />
+      <SignIn />
     </div>
   );
 };

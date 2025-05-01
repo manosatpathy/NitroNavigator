@@ -1,19 +1,33 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect, useRef } from "react";
 import { useSearchContext } from "../contexts/SearchContext";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { MdOutlineCalendarMonth } from "react-icons/md";
+import {
+  MdChildCare,
+  MdLocationOn,
+  MdOutlineCalendarMonth,
+  MdPerson,
+  MdSearch,
+} from "react-icons/md";
 
 const Hero = () => {
   const navigate = useNavigate();
   const search = useSearchContext();
+  const isFirstRender = useRef(true);
 
   const [destination, setDestination] = useState<string>(search.destination);
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    search.checkIn,
-    search.checkOut,
-  ]);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>(() => {
+    if (search.checkIn && search.checkOut) {
+      return [search.checkIn, search.checkOut];
+    }
+
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return [today, tomorrow];
+  });
+
   const [startDate, endDate] = dateRange;
   const [adultCount, setAdultCount] = useState<number>(search.adultCount);
   const [childCount, setChildCount] = useState<number>(search.childCount);
@@ -36,6 +50,17 @@ const Hero = () => {
   const maxDate = new Date();
   maxDate.setFullYear(maxDate.getFullYear() + 1);
 
+  useEffect(() => {
+    if (isFirstRender.current) {
+      if (startDate && (!endDate || endDate <= startDate)) {
+        const nextDay = new Date(startDate);
+        nextDay.setDate(nextDay.getDate() + 1);
+        setDateRange([startDate, nextDay]);
+      }
+      isFirstRender.current = false;
+    }
+  }, [startDate, endDate]);
+
   return (
     <div className='relative bg-[url("/hotel.jpg")] bg-no-repeat bg-cover bg-center h-screen'>
       <div className="absolute inset-0 bg-black/35"></div>
@@ -51,29 +76,35 @@ const Hero = () => {
           ></path>
         </svg>
       </div>
-
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 font-[Poppins] animate__animated animate__fadeInDown">
           Discover Your Perfect Stay
         </h1>
-
         <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto font-[Roboto] animate__animated animate__fadeInUp animate__delay-1s">
           Luxury stays. Affordable prices, Instant booking.
         </p>
-
         <form
           onSubmit={handleSubmit}
-          className="bg-white/10 backdrop-blur-lg rounded-xl p-4 md:p-6 max-w-6xl w-full"
+          className="bg-white/15 backdrop-blur-md rounded-2xl p-6 md:p-8 max-w-6xl w-full shadow-xl border border-white/20"
         >
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <input
-              type="text"
-              placeholder="Where would you like to stay?"
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-              className="max-w-sm px-4 py-3 rounded-lg bg-white/10 border border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-green-500 transition duration-200 w-full"
-            />
-            <div className="relative ">
+          <div className="flex flex-col md:flex-row gap-5 items-center">
+            <div className="w-full relative">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white">
+                <MdLocationOn className="text-2xl text-gray-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Where would you like to stay?"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 text-white placeholder-gray-300 focus:outline-none border border-white/20"
+              />
+            </div>
+
+            <div className="relative w-full md:w-auto">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white">
+                <MdOutlineCalendarMonth className="text-xl" />
+              </div>
               <DatePicker
                 selectsRange
                 startDate={startDate}
@@ -81,42 +112,64 @@ const Hero = () => {
                 onChange={(update) => setDateRange(update)}
                 minDate={minDate}
                 maxDate={maxDate}
-                dateFormat="dd-MM-yyyy"
+                dateFormat="MMM d, yyyy"
                 placeholderText="Select your dates"
-                className="w-full md:w-auto pr-9 pl-4 py-3 rounded-lg bg-white/10 border border-gray-500 text-white focus:outline-none focus:border-green-500 transition duration-200"
+                className="w-full md:w-72 pl-11 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none"
                 wrapperClassName="w-full md:w-auto"
+                shouldCloseOnSelect={false}
+                filterDate={(date) => {
+                  if (!startDate) return true;
+                  if (!endDate) {
+                    return date >= startDate;
+                  }
+                  return true;
+                }}
               />
-              <MdOutlineCalendarMonth className="absolute top-4 right-4 text-white" />
             </div>
-            <label className="text-white flex items-center gap-2">
-              Adults:
-              <input
-                type="number"
-                min={1}
-                max={20}
-                value={adultCount}
-                onChange={(e) => setAdultCount(Number(e.target.value))}
-                className="pl-2 py-2 rounded bg-white/10 border border-gray-500 text-white focus:outline-none"
-              />
-            </label>
+            <div className="flex gap-4 w-full md:w-auto">
+              <div className="relative w-full md:w-auto">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white">
+                  <MdPerson className="text-xl" />
+                </div>
+                <input
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={adultCount}
+                  onChange={(e) => setAdultCount(Number(e.target.value))}
+                  className="w-20 pl-10 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none"
+                  aria-label="Adults"
+                />
+                <span className="absolute text-white text-xs -bottom-5 left-0 font-medium">
+                  Adults
+                </span>
+              </div>
 
-            <label className="text-white flex items-center gap-2">
-              Children:
-              <input
-                type="number"
-                min={0}
-                max={20}
-                value={childCount}
-                onChange={(e) => setChildCount(Number(e.target.value))}
-                className="pl-2 py-2 rounded bg-white/10 border border-gray-500 text-white focus:outline-none"
-              />
-            </label>
+              <div className="relative w-full md:w-auto">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white">
+                  <MdChildCare className="text-xl" />
+                </div>
+                <input
+                  type="number"
+                  min={0}
+                  max={20}
+                  value={childCount}
+                  onChange={(e) => setChildCount(Number(e.target.value))}
+                  className="w-20 pl-10 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none"
+                  aria-label="Children"
+                />
+                <span className="absolute text-white text-xs -bottom-5 left-0 font-medium">
+                  Children
+                </span>
+              </div>
+            </div>
 
             <button
               type="submit"
-              className="w-full md:w-auto px-5 py-3 bg-black hover:bg-green-600 text-white font-semibold rounded-lg transition duration-200 mt-4 md:mt-0"
+              className="font-serif w-full md:w-auto px-8 py-4 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl transition duration-300 shadow-lg flex items-center justify-center gap-2 mt-6 md:mt-0"
             >
-              Search Hotels
+              <MdSearch className="text-xl" />
+              <span>Search</span>
             </button>
           </div>
         </form>

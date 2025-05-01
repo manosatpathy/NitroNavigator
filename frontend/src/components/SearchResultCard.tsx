@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { HotelType } from "../../../backend/src/models/hotel";
 import { AiFillStar } from "react-icons/ai";
+import { HotelType } from "../../../backend/src/types";
 
 type Props = {
   hotel: HotelType;
@@ -57,14 +57,14 @@ const SearchResultsCard = ({ hotel }: Props) => {
           </div>
           <div className="flex flex-col items-stretch lg:items-end gap-2">
             <span className="text-xl font-bold text-slate-800">
-              ₹{hotel.pricePerNight}{" "}
+              ${hotel.pricePerNight}{" "}
               <span className="text-sm font-normal text-slate-500">
                 / night
               </span>
             </span>
             <Link
               to={`/detail/${hotel._id}`}
-              className="bg-blue-600 hover:bg-blue-700 text-white text-center font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5"
+              className="bg-indigo-500 hover:bg-indigo-400 text-white text-center font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5"
             >
               View Details
             </Link>

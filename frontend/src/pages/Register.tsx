@@ -42,14 +42,14 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white/30 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg">
+      <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white/30 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg p-1">
         <div className="md:w-1/2 w-full h-64 md:h-auto relative">
           <img
             src="/bg.jpg"
             alt="Background"
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover rounded-lg"
           />
-          <div className="absolute inset-0 bg-green-500/70 z-10" />
+          <div className="absolute inset-0 bg-green-500/70 z-10 rounded-lg" />
         </div>
 
         <form

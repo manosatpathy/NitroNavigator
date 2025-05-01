@@ -104,7 +104,7 @@ const MyHotels = () => {
                   </div>
                   <div className="flex items-center gap-2 text-gray-700 bg-gray-50 p-3 rounded-lg">
                     <BiDollar size={18} className="text-indigo-600" />
-                    <span>₹{hotel.pricePerNight.toLocaleString()} / night</span>
+                    <span>${hotel.pricePerNight} / night</span>
                   </div>
                   <div className="flex items-center gap-2 text-gray-700 bg-gray-50 p-3 rounded-lg">
                     <BsPerson size={18} className="text-indigo-600" />

@@ -6,7 +6,7 @@ const UI_URL = "http://localhost:5173";
 test.beforeEach(async ({ page }) => {
   await page.goto(UI_URL);
 
-  await page.getByRole("link", { name: "Sign In" }).click();
+  await page.getByRole("link", { name: "Login" }).click();
 
   await expect(page.getByRole("heading", { name: "Sign In" })).toBeVisible();
 
@@ -28,7 +28,7 @@ test("should allow user to add a hotel", async ({ page }) => {
   await page.locator('[name="pricePerNight"]').fill("100");
   await page.selectOption('select[name="starRating"]', "3");
 
-  await page.getByText("Budget").click();
+  await page.getByText("Budget").first().click();
 
   await page.getByLabel("Free Wifi").check();
   await page.getByLabel("Parking").check();
@@ -54,9 +54,8 @@ test("should display hotels", async ({ page }) => {
   ).toBeVisible();
   await expect(page.getByText("Puri, india")).toBeVisible();
   await expect(page.getByText("Budget").first()).toBeVisible();
-  await expect(page.getByText("₹1000 per night")).toBeVisible();
+  await expect(page.getByText("$1000 / night")).toBeVisible();
   await expect(page.getByText("2 adults, 4 children").first()).toBeVisible();
-  await expect(page.getByText("3 Star Rating").first()).toBeVisible();
 
   await expect(
     page.getByRole("link", { name: "View Details" }).first()

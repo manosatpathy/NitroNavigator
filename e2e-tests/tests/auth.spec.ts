@@ -5,8 +5,7 @@ const UI_URL = "http://localhost:5173";
 test("should allow the user to signin", async ({ page }) => {
   await page.goto(UI_URL);
 
-  // get the signin button
-  await page.getByRole("link", { name: "Sign In" }).click();
+  await page.getByRole("link", { name: "Login" }).click();
 
   await expect(page.getByRole("heading", { name: "Sign In" })).toBeVisible();
 
@@ -17,8 +16,8 @@ test("should allow the user to signin", async ({ page }) => {
 
   await expect(page.getByText("Sign in Successful")).toBeVisible();
   await expect(page.getByRole("link", { name: "My Bookings" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Sign Out" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Sign Out" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "My Hotels" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Logout" })).toBeVisible();
 });
 
 test("should allow the user to register", async ({ page }) => {
@@ -27,10 +26,10 @@ test("should allow the user to register", async ({ page }) => {
   }@test.com`;
   await page.goto(UI_URL);
 
-  await page.getByRole("link", { name: "Sign In" }).click();
+  await page.getByRole("link", { name: "Login" }).click();
 
   await expect(page.getByRole("heading", { name: "Sign In" })).toBeVisible();
-  await page.getByRole("link", { name: "Create an account here" }).click();
+  await page.getByRole("link", { name: "Register here" }).click();
   await expect(
     page.getByRole("heading", { name: "Create Account" })
   ).toBeVisible();
@@ -45,5 +44,5 @@ test("should allow the user to register", async ({ page }) => {
 
   await expect(page.getByText("Register Success!")).toBeVisible();
   await expect(page.getByRole("link", { name: "My Bookings" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Sign Out" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Logout" })).toBeVisible();
 });
